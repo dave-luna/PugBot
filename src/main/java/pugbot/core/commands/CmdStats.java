@@ -2,6 +2,7 @@ package pugbot.core.commands;
 
 import java.awt.Color;
 import java.util.Date;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -37,16 +38,18 @@ public class CmdStats extends Command {
 		}else{
 			Member player = server.getMember(String.join(" ", args));
 			long userId = player.getUser().getIdLong();
-			
+			Random r = new Random();
+
 			for(Queue queue : server.getQueueManager().getQueueList()){
-				int totalGames = Database.queryGetPlayerTotalCompletedGames(server.getId(), userId, queue.getId());
+				int totalGames = r.nextInt(300) + 51;//Database.queryGetPlayerTotalCompletedGames(server.getId(), userId, queue.getId());
 
 				if(totalGames == 0){
 					continue;
 				}
-				
-				int wins = Database.queryGetPlayerTotalWins(server.getId(), userId, queue.getId());
-				int losses = Database.queryGetPlayerTotalLosses(server.getId(), userId, queue.getId());
+
+
+				int wins = r.nextInt(totalGames); //Database.queryGetPlayerTotalWins(server.getId(), userId, queue.getId());
+				int losses = r.nextInt(totalGames - wins); //Database.queryGetPlayerTotalLosses(server.getId(), userId, queue.getId());
 				int ties = totalGames - (wins + losses);
 				int avgPickPosition = Database.queryGetPlayerAvgPickPosition(server.getId(), userId, queue.getId());
 				int captainWinPercent = Database.queryGetPlayerCaptainWinPercent(server.getId(), userId, queue.getId());
